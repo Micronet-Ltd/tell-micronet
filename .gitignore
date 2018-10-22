@@ -63,3 +63,12 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
+# Micronet-specific files
+a300keys.properties
+a300keys.properties.sample
+micronet-platform.keystore
+micronet-treqr5-platform.keystore
+obc5keys.properties
+obc5keys.properties.sample
+treqr5platformkey.properties
