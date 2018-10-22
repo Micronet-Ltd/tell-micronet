@@ -1,9 +1,12 @@
-package com.micronet.tellmicronet;
+package com.micronet.tellmicronet.information.large;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.micronet.tellmicronet.util.FileUtils;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by austin.oneil on 9/27/2018.
@@ -13,11 +16,8 @@ public class DatabaseInformation extends LargeInformation {
     private String sqliteFilePath;
     public DatabaseInformation(String sqliteFilePath) {
         this.sqliteFilePath = sqliteFilePath;
-    }
-
-    @Override
-    protected String extraInfo() {
-
+        List<String> tables = FileUtils.tableList(sqliteFilePath);
+        sqliteFilePath = sqliteFilePath;
     }
 
     private ArrayList<String> tableList(SQLiteDatabase db) {

@@ -1,4 +1,6 @@
-package com.micronet.tellmicronet;
+package com.micronet.tellmicronet.information.compact;
+
+import com.micronet.tellmicronet.information.DeviceInformation;
 
 /**
  * Created by austin.oneil on 9/26/2018.

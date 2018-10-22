@@ -1,4 +1,4 @@
-package com.micronet.tellmicronet;
+package com.micronet.tellmicronet.information;
 
 /**
  * Created by austin.oneil on 9/26/2018.
