@@ -1,11 +1,9 @@
 package com.micronet.tellmicronet.information.large;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
+import com.micronet.tellmicronet.fragments.BaseInformationFragment;
+import com.micronet.tellmicronet.util.Database;
 import com.micronet.tellmicronet.util.FileUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,22 +12,24 @@ import java.util.List;
 
 public class DatabaseInformation extends LargeInformation {
     private String sqliteFilePath;
+    private Database database;
     public DatabaseInformation(String sqliteFilePath) {
         this.sqliteFilePath = sqliteFilePath;
-        List<String> tables = FileUtils.tableList(sqliteFilePath);
-        sqliteFilePath = sqliteFilePath;
+        database = new Database(sqliteFilePath);
     }
 
-    private ArrayList<String> tableList(SQLiteDatabase db) {
-        ArrayList<String> tableNames = new ArrayList<>();
+    @Override
+    public BaseInformationFragment generateFragment() {
 
-        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-        if (c.moveToFirst()) {
-            while ( !c.isAfterLast() ) {
-                tableNames.add( c.getString( c.getColumnIndex("name")) );
-                c.moveToNext();
-            }
+    }
+
+    @Override
+    public String extraInfo() {
+        StringBuilder sb = new StringBuilder();
+        List<String> tables = FileUtils.tableList(sqliteFilePath);
+        for (String table : tables) {
+            sb.append(FileUtils.tableString(table, sqliteFilePath)).append("\n\n").append("======================").append("\n\n");
         }
-        return tableNames;
+        return sb.toString();
     }
 }

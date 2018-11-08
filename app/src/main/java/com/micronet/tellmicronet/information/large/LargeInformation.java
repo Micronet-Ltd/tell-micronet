@@ -4,6 +4,7 @@ import com.micronet.tellmicronet.fragments.BaseInformationFragment;
 import com.micronet.tellmicronet.information.DeviceInformation;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by austin.oneil on 9/27/2018.
@@ -15,7 +16,7 @@ public class LargeInformation extends DeviceInformation {
 
     }
 
-    public ArrayList<String> filePaths() {
+    public List<String> filePaths() {
         return new ArrayList<>();
     }
 
@@ -32,5 +33,10 @@ public class LargeInformation extends DeviceInformation {
         BaseInformationFragment fragment = new BaseInformationFragment();
         fragment.setText(extraInfo());
         return fragment;
+    }
+
+    // Override as needed.
+    public String extraInfoFileName() {
+        return "extra_info.txt";
     }
 }

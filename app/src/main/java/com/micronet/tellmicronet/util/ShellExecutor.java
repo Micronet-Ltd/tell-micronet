@@ -19,9 +19,11 @@ public class ShellExecutor {
 
         Process p;
         try {
-            p = Runtime.getRuntime().exec(command);
+            Runtime r = Runtime.getRuntime();
+
+            p = r.exec(command);
             p.waitFor();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream())); // return to getInputStream
 
             String line = "";
             while ((line=reader.readLine()) != null) {

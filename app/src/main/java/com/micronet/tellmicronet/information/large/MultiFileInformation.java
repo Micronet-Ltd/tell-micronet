@@ -11,7 +11,7 @@ public class MultiFileInformation extends LargeInformation {
     @Override
     public BaseInformationFragment generateFragment() {
         MultiFileFragment fragment = new MultiFileFragment();
-        fragment.setFiles(filePaths());
+        fragment.setInfo(filePaths(), extraInfo());
         return fragment;
     }
 }

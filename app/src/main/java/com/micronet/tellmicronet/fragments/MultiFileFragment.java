@@ -6,35 +6,36 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.micronet.tellmicronet.R;
 import com.micronet.tellmicronet.util.FileUtils;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MultiFileFragment extends BaseInformationFragment {
 
+    public static final String EXTRA_INFORMATION = "Extra information";
     private Spinner fileSelect;
     private TextView fileView;
     private ProgressBar loadingSpinner;
-    String[] fileList;
+    List<String> fileList;
+    String extraInfo;
 
-    public void setFiles(ArrayList<String> files) {
-        this.fileList = files.toArray(new String[0]);
+    public void setInfo(List<String> files, String extraInfo) {
+        this.fileList = files;
+        this.extraInfo = extraInfo;
+        if(!"".equals(extraInfo) && !(extraInfo == null)) {
+            this.fileList.add("Extra information");
+        }
     }
 
     @Override
@@ -51,7 +52,12 @@ public class MultiFileFragment extends BaseInformationFragment {
         fileSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                displayFile(fileList[i]);
+                if(!EXTRA_INFORMATION.equals(fileList.get(i))) {
+                    displayFile(fileList.get(i));
+                }
+                else {
+                    fileView.setText(extraInfo);
+                }
             }
 
             @Override

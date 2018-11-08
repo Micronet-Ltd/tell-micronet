@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.micronet.tellmicronet.InformationType;
@@ -53,7 +57,9 @@ public class InformationListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     private ImageButton saveButton;
+    private ProgressBar spinner;
     private static List<InformationType> mValues;
+    private final Context thisContext = this;
 
     @SuppressLint("NewApi")
     @Override
@@ -63,14 +69,50 @@ public class InformationListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         saveButton = new ImageButton(this);
+        spinner = new ProgressBar(this);
+        spinner.setVisibility(View.GONE);
         saveButton.setBackgroundResource(R.drawable.save_icon);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                zipFilesUp();
+                spinner.setVisibility(View.VISIBLE);
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            InformationGatherer.generateZipFromInformation(mValues, Devices.A317);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(thisContext, "File generated", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } catch (final IOException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast toast = Toast.makeText(thisContext, e.getMessage(), Toast.LENGTH_LONG);
+                                    toast.getView().setBackgroundColor(Color.RED);
+                                    toast.show();
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                        finally {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    spinner.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+                    }
+                });
+                t.start();
             }
         });
         toolbar.addView(saveButton);
+        toolbar.addView(spinner);
         toolbar.setTitle(getTitle());
 
         if (findViewById(R.id.information_detail_container) != null) {
@@ -84,31 +126,6 @@ public class InformationListActivity extends AppCompatActivity {
         View recyclerView = findViewById(R.id.information_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-    }
-
-    private static void zipFilesUp() {
-        try {
-            String fileName = "mnt/sdcard/tellmicronet.zip";
-            BufferedReader origin = null;
-            FileOutputStream dest = new FileOutputStream(fileName);
-            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
-
-            for (InformationType infoType : mValues) {
-                LargeInformation largeInformation = (LargeInformation) infoType.getCommand(Devices.A317);
-                for(String path : largeInformation.filePaths()) {
-                    ZipEntry entry = new ZipEntry(path.substring(path.lastIndexOf("/")));
-                    out.putNextEntry(entry);
-                    int count;
-
-
-                }
-
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -159,7 +176,6 @@ public class InformationListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-//            holder.mIdView.setText(mValues.get(position));
             holder.mContentView.setText(mValues.get(position).getInformationName());
 
             holder.itemView.setTag(mValues.get(position));

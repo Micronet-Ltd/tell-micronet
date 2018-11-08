@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 
 import com.micronet.tellmicronet.R;
+import com.micronet.tellmicronet.util.Database;
 
 import java.util.List;
 
@@ -19,13 +20,17 @@ import java.util.List;
  */
 public class DatabaseFragment extends BaseInformationFragment {
 
-    String databaseFilePath;
+    Database database;
     Spinner tableSelectSpinner;
     TableLayout tableView;
 
 
     public DatabaseFragment() {
         // Required empty public constructor
+    }
+
+    public DatabaseFragment(Database database) {
+
     }
 
 

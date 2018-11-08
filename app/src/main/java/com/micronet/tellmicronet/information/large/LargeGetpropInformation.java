@@ -10,26 +10,43 @@ import java.util.HashMap;
 
 public class LargeGetpropInformation extends LargeTableInformation {
 
+    private static HashMap<String, String> getpropHashCache = null;
+
     public LargeGetpropInformation() {
         super(getpropHash());
     }
 
     public static HashMap<String, String> getpropHash() {
-        HashMap<String, String> map = new HashMap<>();
-        String output = getpropString();
-        String[] lines = output.split("\n");
-        for (String line : lines) {
-            String[] splitLine = line.split(":");
-            String key = splitLine[0].trim().substring(1, splitLine[0].length()-1);
-            String value = splitLine[1].trim().substring(1, splitLine[1].length()-2);
-            map.put(key, value);
+        if(getpropHashCache == null) {
+            getpropHashCache = new HashMap<>();
+            String output = getpropString();
+            String[] lines = output.split("\n");
+            for (String line : lines) {
+                String[] splitLine = line.split(":");
+                String key = splitLine[0].trim().substring(1, splitLine[0].length() - 1);
+                String value = splitLine[1].trim().substring(1, splitLine[1].length() - 2);
+                getpropHashCache.put(key, value);
+            }
         }
-        return map;
+        return getpropHashCache;
+    }
+
+    @Override
+    public String extraInfoFileName() {
+        return "properties.csv";
     }
 
     @Override
     public String retrieveInfo() {
-        return getpropString();
+        HashMap<String, String> map = getpropHash();
+        StringBuilder retString = new StringBuilder("Property name\tProperty value\n");
+        for (String key : map.keySet()) {
+            retString.append(key);
+            retString.append("\t");
+            retString.append(map.get(key));
+            retString.append("\n");
+        }
+        return retString.toString();
     }
 
     private static String getpropString() {

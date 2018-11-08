@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.chainfire.libsuperuser.Shell;
+
 /**
  * Created by austin.oneil on 10/8/2018.
  */
@@ -25,5 +27,15 @@ public class LogcatInformation extends MultiFileInformation {
             }
         }
         return paths;
+    }
+
+    @Override
+    protected String extraInfo() {
+        return FileUtils.multiLineString(Shell.SU.run("logcat -d"));
+    }
+
+    @Override
+    public String extraInfoFileName() {
+        return "logcat_buffer.txt";
     }
 }

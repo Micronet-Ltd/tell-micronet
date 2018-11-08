@@ -25,7 +25,7 @@ public class LargeTableInformation extends LargeInformation {
         StringBuilder builder = new StringBuilder();
         for (String key : information.keySet()) {
             builder.append(key);
-            builder.append("\t");
+            builder.append(":\t");
             builder.append(information.get(key));
             builder.append("\n");
         }

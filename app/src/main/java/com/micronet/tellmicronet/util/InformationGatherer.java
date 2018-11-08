@@ -5,15 +5,21 @@ import android.content.Context;
 import com.micronet.tellmicronet.InformationType;
 import com.micronet.tellmicronet.information.compact.CompactCommandInformation;
 import com.micronet.tellmicronet.information.compact.CompactFileInformation;
+import com.micronet.tellmicronet.information.compact.CompactGpioInformation;
 import com.micronet.tellmicronet.information.compact.CompactInformation;
+import com.micronet.tellmicronet.information.compact.CompactQbridgeInformation;
+import com.micronet.tellmicronet.information.large.DatabaseInformation;
 import com.micronet.tellmicronet.information.large.DmesgInformation;
 import com.micronet.tellmicronet.information.large.LargeCommandInformation;
 import com.micronet.tellmicronet.information.large.LargeGetpropInformation;
+import com.micronet.tellmicronet.information.large.LargeInformation;
 import com.micronet.tellmicronet.information.large.LargeTableInformation;
 import com.micronet.tellmicronet.information.large.LogcatInformation;
-import com.micronet.tellmicronet.information.large.NetworkInformation;
 import com.micronet.tellmicronet.information.large.RedbendInformation;
+import com.micronet.tellmicronet.information.large.TombstoneInformation;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,12 +42,15 @@ public class InformationGatherer {
         list.add(new InformationType("MCU version", new CompactFileInformation("/sys/module/device/parameters/mcuver")));
         list.add(new InformationType("Kernel information", new CompactFileInformation("/proc/version")));
         list.add(new InformationType("Dmesg information", new DmesgInformation()));
-//        list.add(new InformationType("APN database", new DatabaseInformation("/data/data/com.android.providers.telephony/databases/telephony.db")));
+        list.add(new InformationType("APN database", new DatabaseInformation("/data/data/com.android.providers.telephony/databases/telephony.db")));
         list.add(new InformationType("Currently running processes", new LargeCommandInformation("ps")));
         list.add(new InformationType("Bootloader", new CompactCommandInformation("getprop ro.bootloader")));
 //        list.add(new InformationType("Network information", new NetworkInformation(context)));
         list.add(new InformationType("System properties", new LargeGetpropInformation()));
+        list.add(new InformationType("Tombstones", new TombstoneInformation()));
         list.add(new InformationType("Redbend information", new RedbendInformation()));
+        list.add(new InformationType("QBridge version information", new CompactQbridgeInformation(context)));
+        list.add(new InformationType("GPIOs", new CompactGpioInformation()));
         return list;
     }
 
@@ -67,4 +76,27 @@ public class InformationGatherer {
         }
         return new LargeTableInformation(informationHashMap);
     }
+
+    public static void generateZipFromInformation(List<InformationType> informationList, String device) throws IOException {
+        HashMap<String, String> informationMap = new HashMap<>();
+        String tempDirectory = "/data/internal_Storage/tellmicronettemp";
+        File dir = new File(tempDirectory);
+        dir.mkdir();
+        for (InformationType information : informationList) {
+            String tempFilePath = tempDirectory + "/" + information.getInformationName();
+            LargeInformation largeInformation = (LargeInformation)information.getCommand(device);
+            FileUtils.generateTextFile(tempFilePath, largeInformation.retrieveInfo());
+            informationMap.put(tempFilePath, information.getInformationName() + "/" + largeInformation.extraInfoFileName());
+            List<String> paths = largeInformation.filePaths();
+            if(!paths.isEmpty()) {
+                for (String file : paths) {
+                    String path = information.getInformationName() + "/" + file.substring(file.lastIndexOf("/") + 1);
+                    informationMap.put(file, path);
+                }
+            }
+        }
+        FileUtils.ZipFiles(informationMap, "/data/internal_Storage/");
+        dir.delete();
+    }
+
 }
