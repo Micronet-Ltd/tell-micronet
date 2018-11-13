@@ -31,17 +31,25 @@ public class Database {
     public class Table {
         List<HashMap<String, String>> rows;
 
+        public Set<String> getColumns() {
+            return rows.get(0).keySet();
+        }
+
+        public List<HashMap<String, String>> getRows() {
+            return rows;
+        }
+
         public Table(String path, String tableName) {
             rows = new ArrayList<>();
 
-            String[] rowList = FileUtils.shellSqlCommand("SELECT * FROM " + tableName + ";", path).split("\n");
-            String[] columns = rowList[0].split("|");
+            String[] rowList = FileUtils.tableString(tableName, path).split("\n");
+            List<String> columns = FileUtils.columns(path, tableName);
 
-            for(int i=1; i<rowList.length; i++) {
+            for(String row : rowList) {
                 HashMap<String, String> dataEntries = new HashMap<>();
-                String[] data = rowList[i].split("|");
+                String[] data = row.split("\\|");
                 for(int j=0; j<data.length; j++) {
-                    dataEntries.put(columns[j], data[j]);
+                    dataEntries.put(columns.get(j), data[j]);
                 }
                 rows.add(dataEntries);
             }

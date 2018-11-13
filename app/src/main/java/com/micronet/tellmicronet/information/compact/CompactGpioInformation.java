@@ -13,7 +13,7 @@ import eu.chainfire.libsuperuser.Shell;
  */
 
 public class CompactGpioInformation extends CompactInformation {
-    private static final int TOTAL_GPIOS = 6;
+    private static final int TOTAL_GPIOS = 3; // TODO: make more flexible for other devices
 
     @Override
     public String retrieveInfo() {

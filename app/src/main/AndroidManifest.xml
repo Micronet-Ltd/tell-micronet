@@ -17,9 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
-
-        </activity>
+        <activity android:name=".activity.MainActivity"></activity>
         <activity
             android:name=".activity.InformationListActivity"
             android:label="@string/title_information_list"
@@ -39,6 +37,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.micronet.tellmicronet.activity.InformationListActivity" />
         </activity>
+
+        <receiver
+            android:name=".util.ZipReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.micronet.tellmicronet.intent.GENERATE_ZIP" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

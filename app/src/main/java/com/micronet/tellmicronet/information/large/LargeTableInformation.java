@@ -16,6 +16,8 @@ public class LargeTableInformation extends LargeInformation {
 
     HashMap<String, String> information;
 
+    public LargeTableInformation() {}
+
     public LargeTableInformation(HashMap<String, String> information) {
         this.information = information;
     }

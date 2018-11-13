@@ -8,9 +8,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </Spinner>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TableLayout
         android:id="@+id/table_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></TableLayout>
-
+        android:layout_height="wrap_content">
+    </TableLayout>
+    </HorizontalScrollView>
 </LinearLayout>

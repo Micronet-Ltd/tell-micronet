@@ -47,6 +47,9 @@ public class FileUtils {
         File folder = new File(directory);
 
         File[] listOfFiles = folder.listFiles();
+        if(listOfFiles == null) {
+            return fileList;
+        }
         for (File f : listOfFiles) {
             if(f.isFile()) {
                 fileList.add(f);
@@ -90,6 +93,7 @@ public class FileUtils {
     public static String tableString(String tableName, String sqliteFilePath) {
         String sqlCommand = "SELECT * FROM " + tableName + ";" ;
         String fullCommand = shellSqlCommand(sqliteFilePath, sqlCommand);
+//S
         List<String> result = Shell.SU.run(fullCommand);
         Shell.SU.clearCachedResults();
         return multiLineString(result);
@@ -101,9 +105,22 @@ public class FileUtils {
     }
 
     public static List<String> tableList(String sqliteFilePath) {
+
         String sqlCommand = "SELECT name FROM sqlite_master WHERE type=\'table\';";
         String fullCommand = shellSqlCommand(sqliteFilePath, sqlCommand);
         List<String> tableNames = Shell.SU.run(fullCommand);
         return tableNames;
+    }
+
+    public static List<String> columns(String sqliteFilePath, String table) {
+        List<String> columns = new ArrayList<>();
+        String sqlCommand = "PRAGMA table_info(" + table + ");" ;
+        String fullCommand = shellSqlCommand(sqliteFilePath, sqlCommand);
+        List<String> rows = Shell.SU.run(fullCommand);
+        for (String row : rows) {
+            String[] entries = row.split("\\|");
+            columns.add(entries[1]);
+        }
+        return columns;
     }
 }

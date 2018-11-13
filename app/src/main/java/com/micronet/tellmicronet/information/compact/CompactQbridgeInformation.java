@@ -23,7 +23,7 @@ public class CompactQbridgeInformation extends CompactInformation {
     @Override
     public String retrieveInfo() {
         IntentFilter filter = new IntentFilter("com.micronet.qbupgrade.SEND_QB_VERSION_NUMBER");
-        Intent intent = context.registerReceiver(null, filter);
+        Intent intent = context.getApplicationContext().registerReceiver(null, filter);
         if(intent != null) {
             return intent.getStringExtra("QB_VERSION_NUMBER");
         }

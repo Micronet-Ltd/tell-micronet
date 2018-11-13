@@ -32,6 +32,7 @@ public class TableInformationFragment extends BaseInformationFragment {
             TableRow row = new TableRow(getContext());
             i++;
             if(i%2==0) {
+                Color color = getResources().getColor()
                 row.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             }
             else {
@@ -45,11 +46,13 @@ public class TableInformationFragment extends BaseInformationFragment {
             keyView.setText((String)key);
             keyView.setTypeface(keyView.getTypeface(), Typeface.BOLD);
             keyView.setTextColor(Color.WHITE);
+            keyView.setTextSize(18.0f);
             row.addView(keyView);
 
             TextView valueView = new TextView(getContext());
             valueView.setText(mapping.get(key));
             valueView.setTextColor(Color.WHITE);
+            valueView.setTextSize(18.0f);
             row.addView(valueView);
 
             informationTable.addView(row);

@@ -8,6 +8,8 @@ import com.micronet.tellmicronet.information.compact.CompactFileInformation;
 import com.micronet.tellmicronet.information.compact.CompactGpioInformation;
 import com.micronet.tellmicronet.information.compact.CompactInformation;
 import com.micronet.tellmicronet.information.compact.CompactQbridgeInformation;
+import com.micronet.tellmicronet.information.large.ApnInformation;
+import com.micronet.tellmicronet.information.large.CommunitakeInformation;
 import com.micronet.tellmicronet.information.large.DatabaseInformation;
 import com.micronet.tellmicronet.information.large.DmesgInformation;
 import com.micronet.tellmicronet.information.large.LargeCommandInformation;
@@ -15,6 +17,7 @@ import com.micronet.tellmicronet.information.large.LargeGetpropInformation;
 import com.micronet.tellmicronet.information.large.LargeInformation;
 import com.micronet.tellmicronet.information.large.LargeTableInformation;
 import com.micronet.tellmicronet.information.large.LogcatInformation;
+import com.micronet.tellmicronet.information.large.PackageInformation;
 import com.micronet.tellmicronet.information.large.RedbendInformation;
 import com.micronet.tellmicronet.information.large.TombstoneInformation;
 
@@ -36,13 +39,14 @@ public class InformationGatherer {
         InformationType mnfrParameters = new InformationType("Manufacturing parameters", new CompactFileInformation("sys/module/device/parameters/mnfrparams"));
         list.add(mnfrParameters);
         list.add(new InformationType("Logcat", new LogcatInformation()));
-        list.add(new InformationType("Package list", new LargeCommandInformation("pm list packages")));
+        list.add(new InformationType("Package list", new PackageInformation(context)));
+//        list.add(new InformationType("Package list", new LargeCommandInformation("pm list packages")));
         list.add(new InformationType("OS version", new CompactCommandInformation("getprop ro.build.description")));
         list.add(new InformationType("Uboot information", new CompactFileInformation("/sys/module/device/parameters/ubootver")));
         list.add(new InformationType("MCU version", new CompactFileInformation("/sys/module/device/parameters/mcuver")));
         list.add(new InformationType("Kernel information", new CompactFileInformation("/proc/version")));
         list.add(new InformationType("Dmesg information", new DmesgInformation()));
-        list.add(new InformationType("APN database", new DatabaseInformation("/data/data/com.android.providers.telephony/databases/telephony.db")));
+        list.add(new InformationType("APN database", new ApnInformation()));
         list.add(new InformationType("Currently running processes", new LargeCommandInformation("ps")));
         list.add(new InformationType("Bootloader", new CompactCommandInformation("getprop ro.bootloader")));
 //        list.add(new InformationType("Network information", new NetworkInformation(context)));
@@ -51,6 +55,7 @@ public class InformationGatherer {
         list.add(new InformationType("Redbend information", new RedbendInformation()));
         list.add(new InformationType("QBridge version information", new CompactQbridgeInformation(context)));
         list.add(new InformationType("GPIOs", new CompactGpioInformation()));
+        list.add(new InformationType("Communitake logs", new CommunitakeInformation()));
         return list;
     }
 
@@ -78,8 +83,12 @@ public class InformationGatherer {
     }
 
     public static void generateZipFromInformation(List<InformationType> informationList, String device) throws IOException {
-        HashMap<String, String> informationMap = new HashMap<>();
         String tempDirectory = "/data/internal_Storage/tellmicronettemp";
+        generateZipFromInformation(informationList, device, tempDirectory);
+    }
+
+    public static void generateZipFromInformation(List<InformationType> informationList, String device, String tempDirectory) throws IOException {
+        HashMap<String, String> informationMap = new HashMap<>();
         File dir = new File(tempDirectory);
         dir.mkdir();
         for (InformationType information : informationList) {

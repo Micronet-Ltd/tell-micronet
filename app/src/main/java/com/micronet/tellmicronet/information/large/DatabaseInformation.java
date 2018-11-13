@@ -1,6 +1,7 @@
 package com.micronet.tellmicronet.information.large;
 
 import com.micronet.tellmicronet.fragments.BaseInformationFragment;
+import com.micronet.tellmicronet.fragments.DatabaseFragment;
 import com.micronet.tellmicronet.util.Database;
 import com.micronet.tellmicronet.util.FileUtils;
 
@@ -20,7 +21,9 @@ public class DatabaseInformation extends LargeInformation {
 
     @Override
     public BaseInformationFragment generateFragment() {
-
+        DatabaseFragment fragment = new DatabaseFragment();
+        fragment.setDatabase(database);
+        return fragment;
     }
 
     @Override
