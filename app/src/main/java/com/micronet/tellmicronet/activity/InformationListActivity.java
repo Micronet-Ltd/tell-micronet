@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.dropbox.core.DbxException;
 import com.micronet.tellmicronet.InformationType;
 import com.micronet.tellmicronet.R;
 import com.micronet.tellmicronet.dummy.DummyContent;
@@ -97,8 +98,16 @@ public class InformationListActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             });
-                        }
-                        finally {
+                        } catch (DbxException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast toast = Toast.makeText(thisContext, "Could not upload the zipped folder.", Toast.LENGTH_LONG);
+                                    toast.getView().setBackgroundColor(Color.RED);
+                                    toast.show();
+                                }
+                            });
+                        } finally {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

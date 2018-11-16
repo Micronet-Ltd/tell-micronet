@@ -2,6 +2,7 @@ package com.micronet.tellmicronet.util;
 
 import android.content.Context;
 
+import com.dropbox.core.DbxException;
 import com.micronet.tellmicronet.InformationType;
 import com.micronet.tellmicronet.information.compact.CompactCommandInformation;
 import com.micronet.tellmicronet.information.compact.CompactFileInformation;
@@ -82,12 +83,12 @@ public class InformationGatherer {
         return new LargeTableInformation(informationHashMap);
     }
 
-    public static void generateZipFromInformation(List<InformationType> informationList, String device) throws IOException {
+    public static void generateZipFromInformation(List<InformationType> informationList, String device) throws IOException, DbxException {
         String tempDirectory = "/data/internal_Storage/tellmicronettemp";
         generateZipFromInformation(informationList, device, tempDirectory);
     }
 
-    public static void generateZipFromInformation(List<InformationType> informationList, String device, String tempDirectory) throws IOException {
+    public static void generateZipFromInformation(List<InformationType> informationList, String device, String tempDirectory) throws IOException, DbxException {
         HashMap<String, String> informationMap = new HashMap<>();
         File dir = new File(tempDirectory);
         dir.mkdir();
@@ -104,7 +105,8 @@ public class InformationGatherer {
                 }
             }
         }
-        FileUtils.ZipFiles(informationMap, "/data/internal_Storage/");
+        File zippedFile = FileUtils.ZipFiles(informationMap, "/data/internal_Storage/");
+        DropboxHelper.getInstance().UploadFile(zippedFile);
         dir.delete();
     }
 

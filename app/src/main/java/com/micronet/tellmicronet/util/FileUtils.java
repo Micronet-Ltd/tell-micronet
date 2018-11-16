@@ -30,6 +30,9 @@ public class FileUtils {
     }
 
     public static String multiLineString(List<String> list) {
+        if(list == null) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         for (String s : list) {
             sb.append(s + "\n");
@@ -62,7 +65,7 @@ public class FileUtils {
         return "/sdcard/Device_" + android.os.Build.SERIAL + "_Debug";
     }
 
-    public static void ZipFiles(HashMap<String, String> filesToBeZipped, String destinationPath) throws IOException {
+    public static File ZipFiles(HashMap<String, String> filesToBeZipped, String destinationPath) throws IOException {
         final int BUFFER = 1024;
         BufferedInputStream origin = null;
         FileOutputStream dest = new FileOutputStream(destinationPath + "/tellmicronet.zip");
@@ -82,6 +85,7 @@ public class FileUtils {
             origin.close();
         }
         out.close();
+        return new File(destinationPath + "/tellmicronet.zip");
     }
 
     public static void generateTextFile(String path, String text) throws IOException {

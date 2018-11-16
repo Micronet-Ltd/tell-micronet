@@ -31,13 +31,7 @@ public class TableInformationFragment extends BaseInformationFragment {
         for (Object key : keys) {
             TableRow row = new TableRow(getContext());
             i++;
-            if(i%2==0) {
-                Color color = getResources().getColor()
-                row.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            }
-            else {
-                row.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-            }
+
             row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
             row.setPadding(1, 1, 1, 5);
 
@@ -45,18 +39,43 @@ public class TableInformationFragment extends BaseInformationFragment {
             TextView keyView = new TextView(getContext());
             keyView.setText((String)key);
             keyView.setTypeface(keyView.getTypeface(), Typeface.BOLD);
-            keyView.setTextColor(Color.WHITE);
+
             keyView.setTextSize(18.0f);
             row.addView(keyView);
 
             TextView valueView = new TextView(getContext());
             valueView.setText(mapping.get(key));
-            valueView.setTextColor(Color.WHITE);
+
             valueView.setTextSize(18.0f);
+            if(i%2==0) {
+                int color = getResources().getColor(R.color.colorPrimary);
+                color = unsaturatedColor(color);
+                row.setBackgroundColor(color);
+            }
+            else {
+                keyView.setTextColor(Color.WHITE);
+                valueView.setTextColor(Color.WHITE);
+                int color = getResources().getColor(R.color.colorAccent);
+                color = unsaturatedColor(color);
+                row.setBackgroundColor(color);
+            }
             row.addView(valueView);
 
             informationTable.addView(row);
         }
+    }
+
+    private int unsaturatedColor(int color) {
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+
+        float[] hsv = new float[3];
+        Color.RGBToHSV(red, green, blue, hsv);
+        hsv[1] = hsv[1] / 2.5f;
+        hsv[2] = hsv[2] * 2.5f;
+        color = Color.HSVToColor(hsv);
+        return color;
     }
 
     @Override

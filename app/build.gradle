@@ -39,6 +39,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compile 'eu.chainfire:libsuperuser:1.0.0.+'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    compile 'com.dropbox.core:dropbox-core-sdk:3.0.10'
     implementation files('libs/a317_canbus_api.jar')
 }
 
