@@ -16,8 +16,6 @@ import java.util.zip.ZipOutputStream;
 
 import eu.chainfire.libsuperuser.Shell;
 
-import static eu.chainfire.libsuperuser.Shell.run;
-
 /**
  * Created by austin.oneil on 10/8/2018.
  */

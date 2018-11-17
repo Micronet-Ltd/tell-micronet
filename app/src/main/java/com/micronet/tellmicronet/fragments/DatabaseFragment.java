@@ -2,7 +2,6 @@ package com.micronet.tellmicronet.fragments;
 
 
 import android.content.Context;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,10 +17,8 @@ import android.widget.TextView;
 import com.micronet.tellmicronet.R;
 import com.micronet.tellmicronet.util.Database;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static com.micronet.tellmicronet.R.color.colorPrimary;
 

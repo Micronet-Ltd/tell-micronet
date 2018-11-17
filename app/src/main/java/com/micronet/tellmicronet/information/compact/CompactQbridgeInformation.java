@@ -1,13 +1,8 @@
 package com.micronet.tellmicronet.information.compact;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-
-import com.micronet.canbus.CanbusInterface;
-
-import junit.runner.Version;
 
 /**
  * Created by austin.oneil on 11/2/2018.

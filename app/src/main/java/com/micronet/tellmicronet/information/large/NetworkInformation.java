@@ -1,15 +1,12 @@
 package com.micronet.tellmicronet.information.large;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.telephony.CellInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
-import com.micronet.tellmicronet.fragments.BaseInformationFragment;
 import com.micronet.tellmicronet.fragments.TableInformationFragment;
 
 import java.util.HashMap;

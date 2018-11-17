@@ -1,7 +1,7 @@
 package com.micronet.tellmicronet.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.micronet.tellmicronet.R;
 

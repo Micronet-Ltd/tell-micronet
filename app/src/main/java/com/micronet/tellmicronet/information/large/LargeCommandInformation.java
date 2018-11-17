@@ -1,7 +1,6 @@
 package com.micronet.tellmicronet.information.large;
 
 import com.micronet.tellmicronet.util.FileUtils;
-import com.micronet.tellmicronet.util.ShellExecutor;
 
 import eu.chainfire.libsuperuser.Shell;
 

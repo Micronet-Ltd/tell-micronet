@@ -1,18 +1,14 @@
 package com.micronet.tellmicronet.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,26 +17,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.dropbox.core.DbxException;
 import com.micronet.tellmicronet.InformationType;
 import com.micronet.tellmicronet.R;
 import com.micronet.tellmicronet.dummy.DummyContent;
 import com.micronet.tellmicronet.fragments.BaseInformationFragment;
-import com.micronet.tellmicronet.fragments.InformationDetailFragment;
-import com.micronet.tellmicronet.information.DeviceInformation;
 import com.micronet.tellmicronet.information.large.LargeInformation;
 import com.micronet.tellmicronet.util.Devices;
 import com.micronet.tellmicronet.util.InformationGatherer;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * An activity representing a list of Information. This activity

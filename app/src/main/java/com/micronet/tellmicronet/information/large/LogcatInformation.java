@@ -1,12 +1,8 @@
 package com.micronet.tellmicronet.information.large;
 
 import com.micronet.tellmicronet.util.FileUtils;
-import com.micronet.tellmicronet.util.ShellExecutor;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,5 @@
 package com.micronet.tellmicronet.information.large;
 
-import com.micronet.tellmicronet.fragments.BaseInformationFragment;
-import com.micronet.tellmicronet.fragments.MultiFileFragment;
 import com.micronet.tellmicronet.util.FileUtils;
 
 import java.io.File;

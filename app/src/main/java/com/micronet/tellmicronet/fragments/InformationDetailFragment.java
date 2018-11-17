@@ -1,17 +1,17 @@
 package com.micronet.tellmicronet.fragments;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.micronet.tellmicronet.R;
 import com.micronet.tellmicronet.activity.InformationDetailActivity;
 import com.micronet.tellmicronet.activity.InformationListActivity;
-import com.micronet.tellmicronet.R;
 import com.micronet.tellmicronet.dummy.DummyContent;
 
 /**

@@ -1,6 +1,5 @@
 package com.micronet.tellmicronet.information.large;
 
-import com.micronet.tellmicronet.fragments.BaseInformationFragment;
 import com.micronet.tellmicronet.fragments.TableInformationFragment;
 
 import java.util.HashMap;

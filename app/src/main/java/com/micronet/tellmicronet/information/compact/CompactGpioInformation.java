@@ -1,11 +1,5 @@
 package com.micronet.tellmicronet.information.compact;
 
-import android.util.Log;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
 import eu.chainfire.libsuperuser.Shell;
 
 /**

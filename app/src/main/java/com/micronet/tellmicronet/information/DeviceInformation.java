@@ -6,7 +6,4 @@ package com.micronet.tellmicronet.information;
 
 public abstract class DeviceInformation {
     public abstract String retrieveInfo();
-    public void createFile() {
-        // Do nothing.  This is a hook.
-    }
 }

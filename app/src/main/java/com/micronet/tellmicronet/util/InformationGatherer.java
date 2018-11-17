@@ -11,7 +11,6 @@ import com.micronet.tellmicronet.information.compact.CompactInformation;
 import com.micronet.tellmicronet.information.compact.CompactQbridgeInformation;
 import com.micronet.tellmicronet.information.large.ApnInformation;
 import com.micronet.tellmicronet.information.large.CommunitakeInformation;
-import com.micronet.tellmicronet.information.large.DatabaseInformation;
 import com.micronet.tellmicronet.information.large.DmesgInformation;
 import com.micronet.tellmicronet.information.large.LargeCommandInformation;
 import com.micronet.tellmicronet.information.large.LargeGetpropInformation;
@@ -41,7 +40,6 @@ public class InformationGatherer {
         list.add(mnfrParameters);
         list.add(new InformationType("Logcat", new LogcatInformation()));
         list.add(new InformationType("Package list", new PackageInformation(context)));
-//        list.add(new InformationType("Package list", new LargeCommandInformation("pm list packages")));
         list.add(new InformationType("OS version", new CompactCommandInformation("getprop ro.build.description")));
         list.add(new InformationType("Uboot information", new CompactFileInformation("/sys/module/device/parameters/ubootver")));
         list.add(new InformationType("MCU version", new CompactFileInformation("/sys/module/device/parameters/mcuver")));
@@ -50,7 +48,6 @@ public class InformationGatherer {
         list.add(new InformationType("APN database", new ApnInformation()));
         list.add(new InformationType("Currently running processes", new LargeCommandInformation("ps")));
         list.add(new InformationType("Bootloader", new CompactCommandInformation("getprop ro.bootloader")));
-//        list.add(new InformationType("Network information", new NetworkInformation(context)));
         list.add(new InformationType("System properties", new LargeGetpropInformation()));
         list.add(new InformationType("Tombstones", new TombstoneInformation()));
         list.add(new InformationType("Redbend information", new RedbendInformation()));

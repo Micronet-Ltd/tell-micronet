@@ -3,14 +3,10 @@ package com.micronet.tellmicronet.util;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Looper;
-import android.widget.Toast;
 
 import com.dropbox.core.DbxException;
 
 import java.io.IOException;
-
-import javax.xml.datatype.Duration;
 
 public class ZipReceiver extends BroadcastReceiver {
     @Override

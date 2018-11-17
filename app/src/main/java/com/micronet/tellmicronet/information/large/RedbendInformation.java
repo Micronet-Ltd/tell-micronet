@@ -1,13 +1,7 @@
 package com.micronet.tellmicronet.information.large;
 
-import android.content.Context;
-import android.os.Environment;
-
 import com.micronet.tellmicronet.util.FileUtils;
-import com.micronet.tellmicronet.util.ShellExecutor;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

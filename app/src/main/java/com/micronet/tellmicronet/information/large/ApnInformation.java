@@ -1,7 +1,5 @@
 package com.micronet.tellmicronet.information.large;
 
-import android.app.Application;
-
 import com.micronet.tellmicronet.util.FileUtils;
 
 import java.util.List;
