@@ -1,6 +1,7 @@
 package com.micronet.tellmicronet.information.large;
 
 import com.micronet.tellmicronet.util.FileUtils;
+import com.micronet.tellmicronet.util.ShellExecutor;
 
 import java.util.List;
 
@@ -30,7 +31,6 @@ public class ApnInformation extends DatabaseInformation {
 
     @Override
     public List<String> filePaths() {
-
         return super.filePaths();
     }
 }

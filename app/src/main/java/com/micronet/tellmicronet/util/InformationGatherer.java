@@ -1,23 +1,30 @@
 package com.micronet.tellmicronet.util;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Telephony;
+import android.support.annotation.RequiresApi;
 
 import com.dropbox.core.DbxException;
 import com.micronet.tellmicronet.InformationType;
+import com.micronet.tellmicronet.information.NullInformation;
 import com.micronet.tellmicronet.information.compact.CompactCommandInformation;
 import com.micronet.tellmicronet.information.compact.CompactFileInformation;
 import com.micronet.tellmicronet.information.compact.CompactGpioInformation;
 import com.micronet.tellmicronet.information.compact.CompactInformation;
 import com.micronet.tellmicronet.information.compact.CompactQbridgeInformation;
+import com.micronet.tellmicronet.information.compact.SmarthubGpioInformation;
 import com.micronet.tellmicronet.information.large.ApnInformation;
 import com.micronet.tellmicronet.information.large.CommunitakeInformation;
+import com.micronet.tellmicronet.information.large.ContentProviderInformation;
 import com.micronet.tellmicronet.information.large.DmesgInformation;
 import com.micronet.tellmicronet.information.large.LargeCommandInformation;
 import com.micronet.tellmicronet.information.large.LargeGetpropInformation;
 import com.micronet.tellmicronet.information.large.LargeInformation;
 import com.micronet.tellmicronet.information.large.LargeTableInformation;
+import com.micronet.tellmicronet.information.large.A317LogcatInformation;
 import com.micronet.tellmicronet.information.large.LogcatInformation;
-import com.micronet.tellmicronet.information.large.PackageInformation;
 import com.micronet.tellmicronet.information.large.RedbendInformation;
 import com.micronet.tellmicronet.information.large.TombstoneInformation;
 
@@ -38,23 +45,49 @@ public class InformationGatherer {
         List<InformationType> list = new ArrayList<>();
         InformationType mnfrParameters = new InformationType("Manufacturing parameters", new CompactFileInformation("sys/module/device/parameters/mnfrparams"));
         list.add(mnfrParameters);
+        InformationType logcat = new InformationType("Logcat", new LogcatInformation());
+        logcat.addCommand(Devices.A317, new A317LogcatInformation());
         list.add(new InformationType("Logcat", new LogcatInformation()));
-        list.add(new InformationType("Package list", new PackageInformation(context)));
+//        list.add(new InformationType("Package list", new PackageInformation(context))); // TODO: uncomment and fix for SmartHub
         list.add(new InformationType("OS version", new CompactCommandInformation("getprop ro.build.description")));
         list.add(new InformationType("Uboot information", new CompactFileInformation("/sys/module/device/parameters/ubootver")));
         list.add(new InformationType("MCU version", new CompactFileInformation("/sys/module/device/parameters/mcuver")));
         list.add(new InformationType("Kernel information", new CompactFileInformation("/proc/version")));
         list.add(new InformationType("Dmesg information", new DmesgInformation()));
-        list.add(new InformationType("APN database", new ApnInformation()));
+
+        InformationType apnInformation = new InformationType("APN database", new NullInformation());
+        apnInformation.addCommand(Devices.A317, new ApnInformation());
+        apnInformation.addCommand(Devices.SMART_HUB, new ContentProviderInformation(apnHashmap(), context));
+        list.add(apnInformation);
+
         list.add(new InformationType("Currently running processes", new LargeCommandInformation("ps")));
         list.add(new InformationType("Bootloader", new CompactCommandInformation("getprop ro.bootloader")));
         list.add(new InformationType("System properties", new LargeGetpropInformation()));
         list.add(new InformationType("Tombstones", new TombstoneInformation()));
-        list.add(new InformationType("Redbend information", new RedbendInformation()));
-        list.add(new InformationType("QBridge version information", new CompactQbridgeInformation(context)));
-        list.add(new InformationType("GPIOs", new CompactGpioInformation()));
-        list.add(new InformationType("Communitake logs", new CommunitakeInformation()));
+
+        InformationType redbendInformation = new InformationType("RedbendInformation", new RedbendInformation());
+        redbendInformation.addCommand(Devices.SMART_HUB, new NullInformation());
+        list.add(new InformationType("Redbend information", new RedbendInformation())); // TODO: uncomment and fix for SmartHub
+
+        InformationType qbridgeInformationType = new InformationType("QBridge version information", new CompactQbridgeInformation(context));
+        qbridgeInformationType.addCommand(Devices.SMART_HUB, new NullInformation());
+        list.add(qbridgeInformationType);
+
+        InformationType gpioInformation = new InformationType("GPIOs", new CompactGpioInformation());
+        gpioInformation.addCommand(Devices.SMART_HUB, new SmarthubGpioInformation());
+        list.add(gpioInformation);
+        InformationType communitakeLogs = new InformationType("Communitake logs", new NullInformation());
+        communitakeLogs.addCommand(Devices.A317, new CommunitakeInformation());
+        list.add(communitakeLogs);
         return list;
+    }
+
+    private static HashMap<String, Uri> apnHashmap() {
+        HashMap<String, Uri> map = new HashMap<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            map.put("carriers", Telephony.Carriers.CONTENT_URI);
+        }
+        return map;
     }
 
     public static List<InformationType> largeInformationList(Context context) {
@@ -62,7 +95,7 @@ public class InformationGatherer {
         List<InformationType> infoList = new ArrayList<>();
 
         for (InformationType info : informationList) {
-            if(!info.isCompact(Devices.thisDevice())) {
+            if(info.isLarge(Devices.thisDevice())) {
                 infoList.add(info);
             }
         }
@@ -81,7 +114,7 @@ public class InformationGatherer {
     }
 
     public static void generateZipFromInformation(List<InformationType> informationList, String device) throws IOException, DbxException {
-        String tempDirectory = "/data/internal_Storage/tellmicronettemp";
+        String tempDirectory = FileUtils.deviceStoragePath(device) + "tellmicronettemp";
         generateZipFromInformation(informationList, device, tempDirectory);
     }
 
@@ -102,9 +135,10 @@ public class InformationGatherer {
                 }
             }
         }
-        File zippedFile = FileUtils.ZipFiles(informationMap, "/data/internal_Storage/");
+        File zippedFile = FileUtils.ZipFiles(informationMap, FileUtils.deviceStoragePath(device));
         DropboxHelper.getInstance().UploadFile(zippedFile);
         dir.delete();
     }
 
 }
+

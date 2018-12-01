@@ -68,7 +68,7 @@ public class InformationListActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            InformationGatherer.generateZipFromInformation(mValues, Devices.A317);
+                            InformationGatherer.generateZipFromInformation(mValues, Devices.thisDevice());
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -141,7 +141,7 @@ public class InformationListActivity extends AppCompatActivity {
                 InformationType item = (InformationType) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    BaseInformationFragment fragment = ((LargeInformation)item.getCommand(Devices.A317)).generateFragment();  // TODO: give device-level flexibility
+                    BaseInformationFragment fragment = ((LargeInformation)item.getCommand(Devices.thisDevice())).generateFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.information_detail_container, fragment)

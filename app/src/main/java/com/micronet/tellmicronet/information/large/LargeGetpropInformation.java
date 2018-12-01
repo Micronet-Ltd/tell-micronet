@@ -1,5 +1,7 @@
 package com.micronet.tellmicronet.information.large;
 
+import android.util.Log;
+
 import com.micronet.tellmicronet.util.ShellExecutor;
 
 import java.util.HashMap;
@@ -22,10 +24,15 @@ public class LargeGetpropInformation extends LargeTableInformation {
             String output = getpropString();
             String[] lines = output.split("\n");
             for (String line : lines) {
-                String[] splitLine = line.split(":");
-                String key = splitLine[0].trim().substring(1, splitLine[0].length() - 1);
-                String value = splitLine[1].trim().substring(1, splitLine[1].length() - 2);
-                getpropHashCache.put(key, value);
+                try {
+                    String[] splitLine = line.split(":");
+                    String key = splitLine[0].trim().substring(1, splitLine[0].length() - 1);
+                    String value = splitLine[1].trim().substring(1, splitLine[1].length() - 2);
+                    getpropHashCache.put(key, value);
+                }
+                catch (StringIndexOutOfBoundsException e) {
+                    Log.d("Tell-Micronet", "Bad string: " + line);
+                }
             }
         }
         return getpropHashCache;
@@ -50,7 +57,6 @@ public class LargeGetpropInformation extends LargeTableInformation {
     }
 
     private static String getpropString() {
-        ShellExecutor executor = new ShellExecutor();
-        return executor.execute("getprop");
+        return ShellExecutor.execute("getprop");
     }
 }

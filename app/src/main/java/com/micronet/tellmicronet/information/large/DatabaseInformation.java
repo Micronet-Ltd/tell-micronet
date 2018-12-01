@@ -13,14 +13,17 @@ import java.util.List;
 
 public class DatabaseInformation extends LargeInformation {
     private String sqliteFilePath;
-    private Database database;
+    protected Database database;
     public DatabaseInformation(String sqliteFilePath) {
         this.sqliteFilePath = sqliteFilePath;
-        database = new Database(sqliteFilePath);
+    }
+
+    public DatabaseInformation() {
     }
 
     @Override
     public BaseInformationFragment generateFragment() {
+        if(database==null) database = new Database(sqliteFilePath);
         DatabaseFragment fragment = new DatabaseFragment();
         fragment.setDatabase(database);
         return fragment;
@@ -28,11 +31,7 @@ public class DatabaseInformation extends LargeInformation {
 
     @Override
     public String extraInfo() {
-        StringBuilder sb = new StringBuilder();
-        List<String> tables = FileUtils.tableList(sqliteFilePath);
-        for (String table : tables) {
-            sb.append(FileUtils.tableString(table, sqliteFilePath)).append("\n\n").append("======================").append("\n\n");
-        }
-        return sb.toString();
+        if(database==null) database = new Database(sqliteFilePath);
+        return database.toString();
     }
 }

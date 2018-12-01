@@ -1,6 +1,7 @@
 package com.micronet.tellmicronet.information.compact;
 
 import eu.chainfire.libsuperuser.Shell;
+import micronet.hardware.MicronetHardware;
 
 /**
  * Created by austin.oneil on 11/5/2018.

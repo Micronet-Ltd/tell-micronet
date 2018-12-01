@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         a317platformkey
+        obc5keys
     }
 
     compileSdkVersion 26
@@ -19,9 +20,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.a317platformkey
+//            signingConfig signingConfigs.obc5keys
         }
         debug {
             signingConfig signingConfigs.a317platformkey
+//            signingConfig signingConfigs.obc5keys
         }
     }
 }
@@ -37,16 +40,23 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    compile 'eu.chainfire:libsuperuser:1.0.0.+'
+    implementation 'eu.chainfire:libsuperuser:1.0.0.+'
+//    implementation 'eu.chainfire:libsuperuser:+'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
     compile 'com.dropbox.core:dropbox-core-sdk:3.0.10'
     implementation files('libs/a317_canbus_api.jar')
 }
 
 def props = new Properties()
-
 props.load(new FileInputStream(rootProject.file("a317platformkey.properties")))
 android.signingConfigs.a317platformkey.storeFile rootProject.file(props.keyStore)
 android.signingConfigs.a317platformkey.storePassword props.keyStorePassword
 android.signingConfigs.a317platformkey.keyAlias props.keyAlias
 android.signingConfigs.a317platformkey.keyPassword props.keyAliasPassword
+
+def smarthubProps = new Properties()
+smarthubProps.load(new FileInputStream(rootProject.file("obc5keys.properties")))
+android.signingConfigs.obc5keys.storeFile rootProject.file(smarthubProps.keyStore)
+android.signingConfigs.obc5keys.storePassword smarthubProps.keyStorePassword
+android.signingConfigs.obc5keys.keyAlias smarthubProps.keyAlias
+android.signingConfigs.obc5keys.keyPassword smarthubProps.keyAliasPassword

@@ -15,7 +15,6 @@ public class CompactCommandInformation extends CompactInformation {
 
     @Override
     public String retrieveInfo() {
-        ShellExecutor executor = new ShellExecutor();
-        return executor.execute(command);
+        return ShellExecutor.execute(command);
     }
 }

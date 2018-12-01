@@ -1,6 +1,7 @@
 package com.micronet.tellmicronet.information.large;
 
 import com.micronet.tellmicronet.util.FileUtils;
+import com.micronet.tellmicronet.util.ShellExecutor;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -19,7 +20,8 @@ public class LargeCommandInformation extends LargeInformation {
     protected String extraInfo() {
 //        ShellExecutor executor = new ShellExecutor();
 //        String info = executor.execute(command);
-        String info = FileUtils.multiLineString(Shell.SU.run(command));
-        return info;
+        return ShellExecutor.execute(command);
+//        String info = FileUtils.multiLineString(Shell.SU.run(command));
+//        return info;
     }
 }

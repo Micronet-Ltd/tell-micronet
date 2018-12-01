@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -63,6 +64,16 @@ public class FileUtils {
         return "/sdcard/Device_" + android.os.Build.SERIAL + "_Debug";
     }
 
+    public static String deviceStoragePath(String device) {
+        if(Devices.A317.equals(device)) {
+            return "/data/internal_Storage/";
+        }
+        else if (Devices.SMART_HUB.equals(device)){
+            return "/storage/sdcard0/";
+        }
+        return null;
+    }
+
     public static File ZipFiles(HashMap<String, String> filesToBeZipped, String destinationPath) throws IOException {
         final int BUFFER = 1024;
         BufferedInputStream origin = null;
@@ -96,27 +107,30 @@ public class FileUtils {
         String sqlCommand = "SELECT * FROM " + tableName + ";" ;
         String fullCommand = shellSqlCommand(sqliteFilePath, sqlCommand);
 //S
-        List<String> result = Shell.SU.run(fullCommand);
-        Shell.SU.clearCachedResults();
-        return multiLineString(result);
+        return ShellExecutor.execute(fullCommand);
+//        return multiLineString(result);
     }
 
     @NonNull
     public static String shellSqlCommand(String sqliteFilePath, String sqlCommand) {
-        return "sqlite3 " + sqliteFilePath + " \"" + sqlCommand + "\"";
+        return "sqlite3 " + sqliteFilePath + " \'" + sqlCommand + "\'";
     }
 
     public static List<String> tableList(String sqliteFilePath) {
 
-        String sqlCommand = "SELECT name FROM sqlite_master WHERE type=\'table\';";
+        String sqlCommand = "SELECT name FROM sqlite_master WHERE type=\"table\";";
         String fullCommand = shellSqlCommand(sqliteFilePath, sqlCommand);
-        List<String> tableNames = Shell.SU.run(fullCommand);
-        return tableNames;
+        String[] tableNames = ShellExecutor.execute(fullCommand).split("\n");
+        List<String> retList = new ArrayList<>();
+        for (String name : tableNames) {
+            retList.add(name);
+        }
+        return retList;
     }
 
     public static List<String> columns(String sqliteFilePath, String table) {
         List<String> columns = new ArrayList<>();
-        String sqlCommand = "PRAGMA table_info(" + table + ");" ;
+        String sqlCommand = "PRAGMA table_info(" + table + ");";
         String fullCommand = shellSqlCommand(sqliteFilePath, sqlCommand);
         List<String> rows = Shell.SU.run(fullCommand);
         for (String row : rows) {
